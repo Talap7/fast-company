@@ -1,22 +1,16 @@
-import React from 'react'
+import React from "react";
+import PropTypes from "prop-types";
 
-export const Bookmark = (props) => {
-    const bookmarks = [<i className="bi bi-bookmark"></i>, <i className="bi bi-bookmark-heart-fill"></i>]
-
-    if(props.state) {
-        return(
-            <>
-            {bookmarks[1]}
-            </>
-        )
+export const Bookmark = ({ state }) => {
+    if (state) {
+        return <><i className="bi bi-bookmark-heart-fill"></i></>;
     }
 
-    if(!props.state) {
-        return(
-            <>
-            {bookmarks[0]}
-            </>
-        )
+    if (!state) {
+        return <><i className="bi bi-bookmark"></i></>;
     }
+};
 
-}
+Bookmark.propTypes = {
+    state: PropTypes.bool.isRequired
+};
