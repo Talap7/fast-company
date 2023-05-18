@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import api from "../src/api";
 import { Users } from "../src/components/users";
-import { SearchStatus } from "./components/searchStatus";
+import { Route, Switch, Link } from "react-router-dom";
+import Login from "./layouts/login";
+import Main from "./layouts/main";
+import UserPage from "./components/userPage";
 
 export const App = () => {
-    const [users, setUsers] = useState(api.users.fetchAll());
+    const [users, setUsers] = useState();
+
+    useEffect(() => {
+        api.users.fetchAll().then(data => setUsers(data));
+    }, []);
 
     const handleDelete = (userId) => {
         const filtered = users.filter((user) => user._id !== userId);
@@ -24,16 +31,26 @@ export const App = () => {
 
     return (
         <>
-            <SearchStatus length={users.length} />
-            {users.length > 0 && (
-                <>
-                    <Users
-                        users={users}
-                        onDelete={handleDelete}
-                        onToggle={handleToggleBookmark}
-                    />
-                </>
-            )}
+            {<div>
+                <span style={{ marginRight: 10 }}> <Link to="/">Main</Link></span>
+                <span style={{ marginRight: 10 }}> <Link to="/login">Login</Link></span>
+                <span> <Link to="/users">Users</Link></span>
+            </div>}
+
+            {
+                <Switch>
+                    <Route path="/" exact component={Main} />
+                    <Route path="/login" component={Login} />
+                    <Route path="/users/:userId" render={(props) => <UserPage {...props} />} />
+                    <Route path="/users" exact render={() => (users
+                        ? <Users
+                            users={users}
+                            onDelete={handleDelete}
+                            onToggle={handleToggleBookmark}
+                        />
+                        : <h1>Loading...</h1>)} />
+                </Switch>
+            }
         </>
     );
 };

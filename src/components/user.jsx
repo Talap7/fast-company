@@ -13,12 +13,11 @@ export const User = ({ user, onDelete, onToggle }) => {
                         <Quality key={quality._id} {...quality} />
                     ))}
                 </td>
-                <td scope="row">{user.profession.name}</td>
+                <td scope="row"> {user.profession.name}</td>
                 <td scope="row">{user.completedMeetings}</td>
                 <td scope="row">{user.rate}</td>
                 <td scope="row">
                     <button onClick={() => onToggle(user._id)}>
-                        {" "}
                         <Bookmark state={user.bookmark} />
                     </button>
                 </td>

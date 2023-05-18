@@ -3,11 +3,19 @@ import PropTypes from "prop-types";
 
 export const Bookmark = ({ state }) => {
     if (state) {
-        return <><i className="bi bi-bookmark-heart-fill"></i></>;
+        return (
+            <>
+                <i className="bi bi-bookmark-heart-fill"></i>
+            </>
+        );
     }
 
     if (!state) {
-        return <><i className="bi bi-bookmark"></i></>;
+        return (
+            <>
+                <i className="bi bi-bookmark"></i>
+            </>
+        );
     }
 };
 
