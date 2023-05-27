@@ -41,7 +41,7 @@ export const App = () => {
                 <Switch>
                     <Route path="/" exact component={Main} />
                     <Route path="/login" component={Login} />
-                    <Route path="/users/:userId" render={(props) => <UserPage {...props} />} />
+                    <Route path="/users/:userId" component={ UserPage } />
                     <Route path="/users" exact render={() => (users
                         ? <Users
                             users={users}

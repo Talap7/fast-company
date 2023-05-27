@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import api from "../api/fake.api/user.api";
 import { Quality } from "./quality";
 import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 
-const UserPage = ({ match }) => {
-    const userId = match.params.userId;
+const UserPage = () => {
+    const params = useParams();
+    const { userId } = params;
     const [oneUser, setOneUser] = useState();
     useEffect(() => {
         api.getById(userId).then(data => setOneUser(data));
@@ -28,7 +29,3 @@ const UserPage = ({ match }) => {
 };
 
 export default UserPage;
-
-UserPage.propTypes = {
-    match: PropTypes.object
-};

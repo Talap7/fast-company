@@ -7,6 +7,8 @@ import { GroupList } from "./groupList";
 import { SearchStatus } from "./searchStatus";
 import { UsersTable } from "./usersTable";
 import _ from "lodash";
+import SearchField from "./searchField";
+import { searchInput } from "../utils/searchInput";
 
 export const Users = ({ users, onDelete, onToggle }) => {
     const pageSize = 8;
@@ -14,12 +16,14 @@ export const Users = ({ users, onDelete, onToggle }) => {
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
+    const [searchData, setSearchData] = useState({ searchValue: "" });
     const handlePageChange = (pageIndex) => {
         setCurrentPage(pageIndex);
     };
 
     const handleProfessionSelect = (item) => {
         setSelectedProf(item);
+        setSearchData({ searchValue: "" });
     };
 
     useEffect(() => {
@@ -32,16 +36,25 @@ export const Users = ({ users, onDelete, onToggle }) => {
 
     const handleClearFilter = () => {
         setSelectedProf();
+        setSearchData({ searchValue: "" });
     };
 
     const handleSort = (item) => {
         setSortBy(item);
     };
 
+    const handleChangeSearch = ({ target }) => {
+        setSearchData({ searchValue: target.value });
+        setSelectedProf();
+    };
+
+    const searchedUsers = searchInput(searchData.searchValue, users);
+    console.log(searchedUsers);
+
     const filteredUsers = selectedProf ? users.filter(user => user.profession._id === selectedProf._id) : users;
     const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
-    const userCrop = paginate(sortedUsers, currentPage, pageSize);
-    const count = filteredUsers.length;
+    const userCrop = searchedUsers || paginate(sortedUsers, currentPage, pageSize);
+    const count = searchedUsers.length || filteredUsers.length;
 
     if (users) {
         return (
@@ -58,7 +71,8 @@ export const Users = ({ users, onDelete, onToggle }) => {
                 }
                 <div className="d-flex flex-column">
                     <SearchStatus length={count} />
-                    <UsersTable users={userCrop} onSort={handleSort} selectedSort={sortBy} onDelete={onDelete} onToggle={onToggle} />
+                    <SearchField name={ "searchInput" } value={searchData.searchValue} onChange={handleChangeSearch} />
+                    <UsersTable users={userCrop } onSort={handleSort} selectedSort={sortBy} onDelete={onDelete} onToggle={onToggle} />
                     <div className="d-flex justify-content-center">
                         <Pagination
                             itemsCount={count}
